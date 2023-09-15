@@ -21,6 +21,17 @@ app.get('/users', async(req,res)=>
     }
 })
 
+app.post('/users',(req,res)=>{
+    const data= new User(req.body)
+    data.save()
+    .then(user=>
+        {
+            console.log('user saved!',user)
+            res.json({sucess:true, user})
+        })
+    .catch(err=> console.log(err))
+})
+
 
 
 
