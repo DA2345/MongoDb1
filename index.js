@@ -9,6 +9,10 @@ connection()
 app.use(express.static("public"))
 app.use(express.json())
 
+// Middleware to parse JSON requests
+app.use(bodyParser.json());
+
+
 app.get('/users', async(req,res)=>
 {
     try{
@@ -32,7 +36,20 @@ app.post('/users',(req,res)=>{
     .catch(err=> console.log(err))
 })
 
-
+app.delete('/users/:userId', async (req, res) => {
+    try {
+      const userId = req.params.userId;
+      const deletedUser = await User.findByIdAndDelete(userId);
+  
+      if (!deletedUser) {
+        return res.status(404).json({ error: 'User not found' });
+      }  
+      res.json({ success: true, deletedUser });
+      
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  });
 
 
 
